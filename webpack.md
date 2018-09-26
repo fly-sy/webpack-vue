@@ -119,7 +119,7 @@ ps: webpack 只认得js 不认识js之外的文件，如果你想在webpack中�
   { test: /\.less$/, use: ['style-loader', 'css-loader?modules&localIdentName=[path][name]-[local]-[hash:5]', 'less-loader'] } // 打包处理 scss 文件的 loader
   ```
 
-## 5、babel 基本配置(有的浏览器不支持es6，需要使用babel把es6转换成es5或者更低的版本) (这里的所有步骤都不需要你们去做)
+## 5、babel 基本配置
 
 + yarn add babel-core babel-loader babel-plugin-transform-runtime -D    （核心包）
 
@@ -140,8 +140,7 @@ ps: webpack 只认得js 不认识js之外的文件，如果你想在webpack中�
     {
       "presets": [
         "env",      // es的所语法
-        "stage-0",  // 指定用哪个版本
-        "react"     // react的jsx支持包  
+        "stage-0"  // 指定用哪个版本
       ],
       "plugins": [
         "transform-runtime"  // 在插件的基础上运行   
@@ -149,8 +148,45 @@ ps: webpack 只认得js 不认识js之外的文件，如果你想在webpack中�
     }
   ```
 
+## 6、配置.vue 文件  
 
-## 6、vue-cli 安装   
+1. yarn add vue-loader vue-template-compiler -D 
+
+2. 配置vue-loader规则 
+
+  ```
+
+    module: {
+      rules: [
+        { test: /\.vue$/, use: 'vue-loader' } // 处理 .vue 文件的 loader
+      ]
+    }
+    
+  ```
+
+3. 在webpack.config.js文件中配置vue-loader 插件  
+
+    ```
+      const { VueLoaderPlugin } = require('vue-loader')
+
+      plugins: [
+        new VueLoaderPlugin()
+      ]
+
+    ```
+
+## 7、配置url
+
+1. yarn add file-loader url-loader -D 
+
+2. 配置url-loader 规则 
+
+  ```
+    { test: /\.(jpg|png|gif|bmp|jpeg)$/, use: 'url-loader' }, // 处理 图片路径的 loader
+
+  ```
+
+## 8、vue-cli 安装   
 
 1. npm install vue-cli -g  
 
