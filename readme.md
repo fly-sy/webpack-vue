@@ -65,8 +65,7 @@ WebPack可以看做是**模块打包机**：它做的事情是，分析你的项
 1. 安装 html-webpack-plugin 
 
   yarn add html-webpack-plugin -D    
-  
-  
+
 2. 在webpack.config.js 中配置plugins  
 
   ```
@@ -89,6 +88,8 @@ WebPack可以看做是**模块打包机**：它做的事情是，分析你的项
   ```
 #### 7、使用webpack使用css 、less  
 
+webpack默认只支持js的模块化，如果需要把其他文件也当成模块引入，就需要相对应的loader解析器
+
 1. 安装依赖包
   
   yarn add style-loader css-loader -D 
@@ -98,18 +99,39 @@ WebPack可以看做是**模块打包机**：它做的事情是，分析你的项
 2. 配置规则  
 
   ```
+
+  // 这段代码意思是：匹配后缀名为css的文件,然后分别用css-loader，vue-style-loader去解析
   { test: /\.css$/, use: ['style-loader', 'css-loader?modules'] }
   
   { test: /\.less$/, use: ['style-loader', 'css-loader?modules&localIdentName=[path][name]-[local]-[hash:5]', 'less-loader'] } // 打包处理 scss 文件的 loader
   ```
+ 
+ 3. 在src目录下新建一个assets/css目录，创建index.css和index.css 样式可以随意定义 
 
-#### 8、babel 基本配置
+ ```
+    body {
+      color: red;
+      background: url(../images/1.png)
+    }
 
-+ yarn add babel-core babel-loader babel-plugin-transform-runtime -D    （核心包）
+ ```
 
-+ yarn add babel-preset-env babel-preset-stage-0  -D  （语言包）
+ 4. 在index.js 中引入.css或者.less文件  
 
-+ 在webpack.config.js中配置loader 
+  import './assets/css/index.css'
+  import './assets/css/index.less'
+#### 8、使用babel ​	
+
+ES6的语法大多数浏览器依旧不支持,bable可以把ES6转码成ES5语法，这样我们就可以大胆的在项目中使用最新特性了
+
+1. 安装babel依赖包  
+  ```
+    yarn add babel-core babel-loader babel-plugin-transform-runtime -D    （核心包）
+
+    yarn add babel-preset-env babel-preset-stage-0  -D  （语言包）
+  ```
+
+1. 在webpack.config.js中配置loader 
 
   ```
     module: {
@@ -118,7 +140,7 @@ WebPack可以看做是**模块打包机**：它做的事情是，分析你的项
       ]
     }
   ```
-+ 配置 .babelrc 文件 
+2. 配置 .babelrc 文件 
 
   ```
     {
@@ -133,6 +155,8 @@ WebPack可以看做是**模块打包机**：它做的事情是，分析你的项
   ```
 
 #### 9、配置.vue 文件  
+
+在前面的例子里，我们使用 Vue.component 来定义全局组件，在实际项目里，更推荐使用单文件组件
 
 1. yarn add vue-loader vue-template-compiler -D 
 
@@ -150,26 +174,71 @@ WebPack可以看做是**模块打包机**：它做的事情是，分析你的项
 
 3. 在webpack.config.js文件中配置vue-loader 插件  
 
-    ```
-      const { VueLoaderPlugin } = require('vue-loader')
+  ```
+    const { VueLoaderPlugin } = require('vue-loader')
 
-      plugins: [
-        new VueLoaderPlugin()
-      ]
+    plugins: [
+      new VueLoaderPlugin()
+    ]
 
-    ```
+  ```
+
+4. 在src目录下新建一个App.vue
+
+  ```
+    <template>
+      <div class="app">
+        app component
+      </div>
+    </template>
+
+    <script>
+    export default {
+      data: () => ({})
+    };
+    </script>
+
+    <style  scoped>
+    </style>
+
+  ```
 
 #### 10、配置url
 
+把图片也当成模块引入
+
 1. yarn add file-loader url-loader -D 
 
-2. 配置url-loader 规则 
+2. webpack.config.js添加一个loader
 
   ```
     { test: /\.(jpg|png|gif|bmp|jpeg)$/, use: 'url-loader' }, // 处理 图片路径的 loader
 
   ```
+3. 在src目录下新建一个assets/images目录，存放一张图片1.png
 
+4. 在App.vue 中使用图片  
+
+  ```
+    <template>
+      <div class="app">
+        app component
+        <img
+          src="./assets/images/1.png"
+          alt=""
+        >
+      </div>
+    </template>
+    <script>
+    export default {
+      data: () => ({})
+    };
+    </script>
+
+    <style  scoped>
+    </style>
+
+  ```
 ## 三、完整配置
 
 https://github.com/fly-sy/webpack-vue
