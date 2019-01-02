@@ -7,7 +7,7 @@ const { VueLoaderPlugin } = require('vue-loader')
 
 const webpackPlugin = new htmlWebpackPlugin({
   // 引入要写入内存的文件  
-  template: path.join(__dirname, './src/index.html'),
+  template: path.join(__dirname, './index.html'),
   // 给输出的文件取名
   filename: 'index.html'
 })
